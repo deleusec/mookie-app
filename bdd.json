@@ -1,0 +1,29 @@
+{
+  "recipes" : [
+    {
+      "id" : 1,
+      "title" : "Glace au chocolat",
+      "image" : "https://picsum.photos/seed/picsum/300/300"
+    },
+    {
+      "id" : 2,
+      "title" : "Gateau au chocolat",
+      "image" : "https://picsum.photos/seed/picsum/300/300"
+    },
+    {
+      "id" : 3,
+      "title" : "Pates Carbo",
+      "image" : "https://picsum.photos/seed/picsum/300/300"
+    },
+    {
+      "id" : 4,
+      "title" : "Nouilles",
+      "image" : "https://picsum.photos/seed/picsum/300/300"
+    },
+    {
+      "id" : 5,
+      "title" : "Soupe de légumes",
+      "image" : "https://picsum.photos/seed/picsum/300/300"
+    }
+  ]
+}
