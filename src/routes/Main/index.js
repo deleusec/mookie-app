@@ -3,8 +3,10 @@ import {NavigationContainer} from "@react-navigation/native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import SettingsScreen from "../../screens/Settings";
 import RecipesNavigation from "../Recipes";
-import FavoritesScreen from "../../screens/Favorites";
 import {Image, Text} from "react-native";
+import FavoritesNavigation from "../Favorites";
+import DiscoveryPassScreen from "../../screens/DiscoveryPass";
+import DiscoveryNavigation from "../DiscoveryPass";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,22 +24,26 @@ export default function MainNavigation() {
                     tabBarIcon:(()=>{
                         let icon = "";
                         switch (route.name) {
-                            case 'Home':
+                            case 'HomeNav':
+                                icon = require("../../../assets/images/home.png");
+                                break;
+                            case 'DiscoveryNav':
                                 icon = require("../../../assets/images/crown.png");
                                 break;
-                            case 'Favorites':
+                            case 'FavoritesNav':
                                 icon = require("../../../assets/images/heart.png");
                                 break;
-                            case 'Settings':
+                            case 'SettingsNav':
                                 icon = require("../../../assets/images/settings.png");
                                 break;
                         }
                         return <Image source={icon} style={{width:20 , height:20, resizeMode:"contain"}}/>
                     })
             })}>
-                <Tab.Screen name="Home" component={RecipesNavigation} />
-                <Tab.Screen name="Favorites" component={FavoritesScreen} />
-                <Tab.Screen name="Settings" component={SettingsScreen} />
+                <Tab.Screen name="HomeNav" component={RecipesNavigation} />
+                <Tab.Screen name="DiscoveryNav" component={DiscoveryNavigation} />
+                <Tab.Screen name="FavoritesNav" component={FavoritesNavigation} />
+                <Tab.Screen name="SettingsNav" component={SettingsScreen} />
             </Tab.Navigator>
         </NavigationContainer>
     )

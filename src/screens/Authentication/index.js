@@ -1,25 +1,35 @@
 import * as React from 'react';
-import {Button, Text, StyleSheet, View, TouchableHighlight, Image, TextInput} from "react-native";
+import {useState} from 'react';
+import {Alert, Image, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
 import Tabs from "../../components/Tabs";
-import {useState} from "react";
+import colors from "../../variables/colors"
 
-const email = 'cd.deleuse@gmail.com';
-const password = 'hello';
+export default function AuthenticationScreen(props) {
+    /* USER INFO */
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
-export default function AuthenticationScreen() {
+    /* SWITCH */
     const [getSwitch, setSwitch] = useState(0)
-    const [email, setEmail] = useState("")
     const onSelectSwitch = (index) => {
         setSwitch(index)
     }
 
+    const validateLogin =()=> {
+        props.validateLogin(email, password)
+    }
+
     const viewLogin = () => {
         return (
-
             <View style={styles.form}>
                 <Text style={styles.text}>Prêt à mettre les mains à la pâte ?</Text>
-                <TextInput style={styles.form.input} placeholderTextColor={"lightgrey"} placeholder={"Email"}/>
-                <TextInput style={styles.form.input} placeholderTextColor={"lightgrey"} placeholder={"Mot de passe"} secureTextEntry={true}/>
+                <TextInput style={styles.formInput} placeholderTextColor={"lightgrey"} placeholder={"Email"} onChangeText={(e) => setEmail(e)}/>
+                <TextInput style={styles.formInput} placeholderTextColor={"lightgrey"} placeholder={"Mot de passe"} onChangeText={ (e) => setPassword(e)} secureTextEntry={true}/>
+                <TouchableOpacity
+                    activeOpacity={0.6}
+                    underlayColor={"#DDDDDD"}>
+                        <Text onPress={validateLogin} style={styles.button}>Envoyer</Text>
+                </TouchableOpacity>
             </View>
         )
     }
@@ -27,18 +37,12 @@ export default function AuthenticationScreen() {
     const viewLogout = () => {
         return (
             <View style={styles.form}>
-                <TextInput style={styles.form.input} placeholderTextColor={"lightgrey"} placeholder={"Email"} onChangeText={ (e) => setEmail(e)}/>
-                <TextInput style={styles.form.input} placeholderTextColor={"lightgrey"} placeholder={"Email"}/>
-                <TextInput style={styles.form.input} placeholderTextColor={"lightgrey"} placeholder={"Email"}/>
-                <TextInput style={styles.form.input} placeholderTextColor={"lightgrey"} placeholder={"Mot de passe"} secureTextEntry={true}/>
+                <TextInput style={styles.formInput} placeholderTextColor={"lightgrey"} placeholder={"Email"} onChangeText={ (e) => setEmail(e)}/>
+                <TextInput style={styles.formInput} placeholderTextColor={"lightgrey"} placeholder={"Mot de passe"} onChangeText={ (e) => setPassword(e)} secureTextEntry={true}/>
             </View>
         )
     }
 
-    function validateData() {
-        console.log({email})
-        return undefined;
-    }
 
     return (
         <View style={styles.container}>
@@ -49,10 +53,6 @@ export default function AuthenticationScreen() {
                 onSelectSwitch={onSelectSwitch}
             />
             {getSwitch === 0 ? viewLogin() : viewLogout()}
-
-            <TouchableHighlight>
-                <Text onPress={validateData()} style={styles.button}>Envoyer</Text>
-            </TouchableHighlight>
         </View>
     )
 }
@@ -62,7 +62,8 @@ const styles = StyleSheet.create({
         justifyContent : "flex-start",
         alignItems: "center",
         flexGrow : 1,
-        marginTop : 120
+        paddingTop : 120,
+        backgroundColor:colors.cream
     },
     text: {
         color: 'black',
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     },
     button: {
         backgroundColor: '#4E733D',
+        color: colors.white,
         paddingHorizontal : 75,
         paddingVertical : 13,
         borderRadius: 60,
@@ -91,15 +93,16 @@ const styles = StyleSheet.create({
         maxWidth: 300,
         alignItems:'center',
 
-        input: {
-            borderBottomColor : "black",
-            borderBottomWidth : 1,
-            color:"black",
-            placeHolderTextColor: "blue",
-            width: '100%',
-            maxWidth: 300,
-            marginBottom: 25
-        }
+
+    },
+
+    formInput: {
+        borderBottomColor : "black",
+        borderBottomWidth : 1,
+        color:"black",
+        width: '100%',
+        maxWidth: 300,
+        marginBottom: 25
     }
 
 })

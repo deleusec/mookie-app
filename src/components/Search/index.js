@@ -1,14 +1,21 @@
 import React, {useEffect} from "react";
-import {StyleSheet, Text, View} from "react-native";
-import data from "../../../bdd.json";
+import {FlatList, Image, StyleSheet, Text, View} from "react-native";
 import Listing from "../Listing";
+import GLOBAL from "../../variables/global"
+import colors from "../../variables/colors";
 
 export default function Search({data, navigation}) {
 
-    console.log(data)
+    useEffect(()=>{
+        console.log(data)
+    },[data])
     return (
         <View style={styles.container}>
-            <Listing data={data} navigation={navigation}>Recherche</Listing>
+            {data.map((item, index)=>{
+                return(
+                    <Text style={{ width:"100%", color: '#440203', fontFamily: "Poppins-Light", fontSize: 16}} onPress={()=>navigation.navigate('Recipe', item.id)} key={index}>{item.attributes.title}</Text>
+                )
+            })}
         </View>
     )
 }
@@ -16,7 +23,7 @@ export default function Search({data, navigation}) {
 const styles = StyleSheet.create({
     container : {
         paddingTop: 115,
-        backgroundColor: "#FBF7EF",
+        paddingHorizontal: 50,
         position:"absolute",
         top: 0,
         left: 0,

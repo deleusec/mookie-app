@@ -1,21 +1,22 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Button, FlatList, Pressable, StyleSheet, Text, TouchableHighlight, View} from "react-native";
-import AuthScreen from "../../screens/Authentication";
 
 export default function Tabs({buttons, onSelectSwitch}) {
-    const [getSwitch, setSwitch] = useState(0)
+    const [toggle, setToggle] = useState(0)
 
-    const updateSelectSwitch=(val)=> {
-        onSelectSwitch(val)
-        setSwitch(val)
-    }
+
 
     return (
         <View style={styles.container}>
             {buttons.map((e, key) => {
                 return (
-                    <Pressable style={getSwitch === key?styles.button.active:styles.button} onPress={() => updateSelectSwitch(key)}>
-                        <Text style={getSwitch === key?styles.button.text.active:styles.button.text}>{e}</Text>
+                    <Pressable key={key} style={toggle === key ? styles.button.active : styles.button}
+                               onPress={() => {
+                                   setToggle(key);
+                                   onSelectSwitch(key)
+                               }}>
+
+                        <Text style={toggle === key ? styles.button.textActive : styles.button.text}>{e}</Text>
                     </Pressable>
                 );
             })}
@@ -24,15 +25,15 @@ export default function Tabs({buttons, onSelectSwitch}) {
 }
 
 const styles = StyleSheet.create({
-    container : {
+    container: {
         width: '90%',
         flexDirection: 'row',
         padding: 6,
-        backgroundColor:'rgba(78, 115, 61, 0.15);',
+        backgroundColor: 'rgba(78, 115, 61, 0.15);',
         borderRadius: 60,
 
     },
-    button : {
+    button: {
         flex: 1,
         paddingBottom: 7,
         paddingTop: 8,
@@ -47,13 +48,18 @@ const styles = StyleSheet.create({
             borderRadius: 60
         },
 
-        text : {
+        text: {
             textAlign: 'center',
-            color : '#4E733D',
-            active: {
-                textAlign: 'center',
-                color : 'white',
-            }
+            color: '#4E733D',
+            fontFamily:"Poppins-Medium",
+            textAlignVertical:"center"
+        },
+
+        textActive: {
+            textAlign: 'center',
+            color: 'white',
+            fontFamily:"Poppins-Medium",
+            textAlignVertical:"center"
         }
     }
 })

@@ -2,27 +2,32 @@ import React, {useEffect, useState} from "react";
 import {FlatList, Image, Pressable, ScrollView, StyleSheet, Text, View} from "react-native";
 import Item from "../Item";
 
-export default function Listing({children, data, navigation}) {
-    const[list, setList] = useState()
+export default function Listing({children, data, navigation, width=220, height=200, noBorder=false}) {
+    const GLOBAL = require('./../../variables/global')
 
     return(
-        <View style={{paddingTop:25}}>
-            <Text style={{color:'#440203' , fontSize:18}}>{children}</Text>
+        <View style={{paddingTop:25, paddingHorizontal:15}}>
+            <Text style={{color:'#440203' , fontSize:22, paddingVertical: 5, fontFamily: "Poppins-Medium"}}>{children}</Text>
             <FlatList
-                style={{}}
+                style={{  flex: 1, marginHorizontal: -15}}
+                contentContainerStyle={{paddingHorizontal: 15}}
                 horizontal={true}
                 data={data}
-                keyExtractor={item => item.id}
+                keyExtractor={({ id }, index) => id}
                 renderItem={({item}) => {
                     return (
                         <Item
-                        image={item.image}
+                        noBorder={noBorder}
+                        width={height} height={width}
+                        image={GLOBAL.API_URL+item.attributes.images.data[0].attributes.url}
                         onPress={() => navigation.navigate('Recipe', item.id)}
+                        title={item.attributes.title}
                         />
                     )
                 }
                 }
             />
+
 
         </View>
     )
