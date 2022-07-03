@@ -6,9 +6,6 @@ import colors from "../../variables/colors";
 
 export default function Search({data, navigation}) {
 
-    useEffect(()=>{
-        console.log(data)
-    },[data])
     return (
         <View style={styles.container}>
             {data.map((item, index)=>{

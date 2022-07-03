@@ -22,7 +22,9 @@ export default function RecipesScreen({navigation}) {
     const [refreshing, setRefreshing] = useState(false);
     const [isSearch, setIsSearch] = useState(false);
 
+    /* Get all recipes and get recipes with filters */
     const getRecipes = async () => {
+        /* Request from a remote URL  */
         try {
             const response = await fetch('https://api-mookie.herokuapp.com/api/recipes?populate=images&pagination[pageSize]=8');
             const dessert = await fetch('https://api-mookie.herokuapp.com/api/recipes?populate=images&pagination[pageSize]=8&filters[categories][name][$eq]=Dessert');
@@ -31,6 +33,7 @@ export default function RecipesScreen({navigation}) {
             const dessertJson = await dessert.json();
             const dinnerJson = await dinner.json();
 
+            /* data storage */
             setRecipes(json.data);
             setDessert(dessertJson.data);
             setDinner(dinnerJson.data);
@@ -44,6 +47,7 @@ export default function RecipesScreen({navigation}) {
 
 
     useEffect(() => {
+        /* load the function at each refreshing */
         getRecipes();
     },[refreshing])
 
@@ -51,19 +55,22 @@ export default function RecipesScreen({navigation}) {
         setIsSearch(true)
         setSearchData([])
         try {
+            /* request with fetch from a remote url */
             const response = await fetch('https://api-mookie.herokuapp.com/api/recipes?populate=images');
+            /* response returned */
             const json = await response.json();
 
-
+            /* filtering of data with the value entered by the user */
             const data = json.data.filter(item => {
                 if (item.attributes.title.toLowerCase().includes(text.toLowerCase()) && text.length !== 0) {
                     return item
                 }
             })
+
             if(text.length === 0){
                 setIsSearch(false)
             }
-
+            /* data storage*/
             console.log(data)
             setSearchData(data)
             setSearchValue(text)

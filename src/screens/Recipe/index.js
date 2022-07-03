@@ -31,13 +31,14 @@ export default function RecipeScreen({route, navigation}) {
     const viewIngredients = () => {
 
         return (
-            <View style={{ flex:1, width: "100%", flexDirection:"row", flexWrap:"wrap", justifyContent:"center",marginBottom:50,paddingBottom:50, borderBottomWidth:2, borderColor:colors.green}}>
+            ingredients && <View style={{ flex:1, width: "100%", flexDirection:"row", flexWrap:"wrap", justifyContent:"center",marginBottom:50,paddingBottom:50, borderBottomWidth:2, borderColor:colors.green}}>
                 {ingredients.map((item, index)=>{
-                    console.log(item)
-                    const ingredient = item.ingredient.data.attributes
-                    const imageUrl = GLOBAL.API_URL + ingredient.image.data.attributes.url
+                    if(item.ingredient.data.attributes.url){
+                        const ingredient = item.ingredient.data.attributes
+                        const imageUrl = GLOBAL.API_URL + ingredient.image.data.attributes.url
+                    }
                     return(
-                        <View key={index} style={{alignItems:"center", justifyContent:"center", padding: 10}}>
+                        item.ingredient.data.attributes.url && ingredient.image.data.attributes.url && <View key={index} style={{alignItems:"center", justifyContent:"center", padding: 10}}>
                             <Image resizeMode={'contain'} source={{uri:imageUrl}} style={{width: 75, aspectRatio: 2/2}}/>
                             {item.quantity &&<Text style={{fontSize:14, color:colors.maroon, fontFamily:'Poppins-Medium', width:100, textAlign:"center"}}>{item.quantity}</Text>}
                             <Text style={{fontSize:16, color:colors.maroon, fontFamily:'Poppins-Light', width:100, textAlign:"center"}}>{ingredient.name}</Text>
@@ -57,6 +58,7 @@ export default function RecipeScreen({route, navigation}) {
     }
 
     useEffect(() => {
+        /* reloading of functions when the page is focused */
         getRecipeByID(id);
         getFavorites();
         onSelectSwitch(0)
@@ -72,18 +74,24 @@ export default function RecipeScreen({route, navigation}) {
 
     }, [favorites, idRecipe])
 
+    /* get the recipe by the past id of the recipe list */
     const getRecipeByID = async (id) => {
+        /* Request from a remote URL  */
         try {
             const response = await fetch(`https://api-mookie.herokuapp.com/api/recipes/${id}?populate=images,Ingredient.ingredient.image,Steps`);
             const json = await response.json();
+
+            /* data storage with useStates */
             setIngredients(json.data.attributes.Ingredient)
             setRecipe(json.data.attributes);
             setImages(json.data.attributes.images.data)
             setIdRecipe(json.data.id)
             setMainImageUrl(GLOBAL.API_URL + json.data.attributes.images.data[0].attributes.url)
         } catch (error) {
+            /* there is an error in the request */
             console.error(error);
         } finally {
+            /* when the request is completed the loading is passed to false */
             setLoading(false);
         }
     }
@@ -223,14 +231,14 @@ export default function RecipeScreen({route, navigation}) {
                                         }}>Favori</Text>
                                     </TouchableOpacity>
                                 </View>
-                                <View style={{flex:1, paddingVertical:50, alignItems:"center", justifyContent:"center"}}>
+                                {/*<View style={{flex:1, paddingVertical:50, alignItems:"center", justifyContent:"center"}}>
                                     <Tabs
                                         buttons={['Ingredients', 'Ustensiles']}
                                         onSelectSwitch={onSelectSwitch}
                                     />
 
                                     {getSwitch === 0 ? viewIngredients() : viewUtensils()}
-                                </View>
+                                </View>*/}
 
 
 

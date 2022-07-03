@@ -1,35 +1,39 @@
 import React, {useEffect, useState} from "react";
-import {FlatList, Image, Text, TouchableOpacity, View} from "react-native";
+import {ActivityIndicator, FlatList, Image, Text, TouchableOpacity, View} from "react-native";
 import Listing from "../../components/Listing";
 import GLOBAL from '../../variables/global'
 import colors from '../../variables/colors'
 import {useIsFocused} from "@react-navigation/native";
 
 export default function FavoritesScreen({navigation}) {
-
     const isFocused = useIsFocused();
     const [isLoading, setLoading] = useState(true)
 
     const [nameUser, setNameUser] = useState("")
     const [recipes, setRecipes] = useState([])
 
-    useEffect( ()=>{
+    const getRecipes = async () => {
+        try {
+            const response = await fetch('https://api-mookie.herokuapp.com/api/users/1?populate=profiles.recipes.images');
+            const json = await response.json();
+            const favorites = json.profiles[0].recipes
 
-        const result = fetch('https://api-mookie.herokuapp.com/api/users/1?populate=profiles.recipes.images')
-            .then(res => res.json())
-            .then((result) => {
-                setRecipes(result.profiles[0].recipes)
-            })
-            .catch(error => {
-                console.error({error})
-            })
-            .finally(()=> {
-                setLoading(false)
-            })
+            setRecipes(favorites)
+
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    useEffect( ()=>{
+        getRecipes()
     },[isFocused])
 
     return (
-        <View style={{flex:1,backgroundColor:colors.cream}}>
+        isLoading ? <ActivityIndicator/>
+            :<View style={{flex:1,backgroundColor:colors.cream}}>
             <Text style={{fontSize:22, paddingTop:30, paddingBottom: 15, fontFamily:"Poppins-Medium", color:colors.maroon, paddingHorizontal:15}}>Vos recettes Favorites<Image source={require('../../../assets/images/heart_cartoon.png')} resizeMode={"contain"} style={{width: 35, height: 35, marginRight: 10}}/></Text>
             {isLoading === false && <FlatList contentContainerStyle={{paddingHorizontal:10}} keyExtractor={item => item.id} numColumns={2} data={recipes} renderItem={({item})=> {
 

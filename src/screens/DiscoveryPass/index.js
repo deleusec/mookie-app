@@ -65,24 +65,22 @@ export default function DiscoveryPassScreen({navigation}){
         }
     },[freeRecipes, premiumRecipes])
 
-
     const getActualDiscovery = async () => {
         const date = new Date()
         try {
-            const discovery = await fetch('https://api-mookie.herokuapp.com/api/discovery-passes?populate=image,Gifts.gift,Gifts.gift.image', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
+            const discovery = await fetch('https://api-mookie.herokuapp.com/api/discovery-passes?populate=image,Gifts.gift,Gifts.gift.image')
             const json = await discovery.json();
 
-            const actualDiscoveryPass = json.data.filter(discovery => {
+            console.log(json.data)
+
+            const actualDiscoveryPass = json.data.filter((discovery) => {
+                console.log(discovery)
                 const begin = new Date(discovery.attributes.begin_date);
                 const end = new Date(discovery.attributes.end_date);
 
                 if (date > begin && date < end) {
                     return discovery
+
                 }
             })
             setImageUrl(GLOBAL.API_URL + actualDiscoveryPass[0].attributes.image.data.attributes.url)
