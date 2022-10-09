@@ -111,12 +111,7 @@ export default function RecipeScreen({route, navigation}) {
     const addFavorite = async () => {
 
         if(isFavorite){
-            const filterFavorites = favorites.filter(item => {
-                if(item !== idRecipe){
-                    return item
-                }
-            })
-            setFavorites(filterFavorites)
+
             const requestOptions = {
                 method: 'PUT',
                 headers: {
